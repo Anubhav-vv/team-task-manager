@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, LogOut, Zap, User } from 'lucide-react';
+import { LayoutDashboard, FolderOpen, LogOut, Layers } from 'lucide-react';
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -11,54 +11,81 @@ export default function Layout() {
     navigate('/login');
   };
 
-  const link = ({ isActive }) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-      isActive
-        ? 'bg-indigo-500/20 text-indigo-300'
-        : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
-    }`;
-
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-60 shrink-0 flex flex-col border-r border-slate-800" style={{ background: '#0d1526' }}>
+    <div style={{ minHeight: '100vh', background: '#f7f6f3' }}>
+      {/* Top navbar */}
+      <header style={{
+        position: 'sticky', top: 0, zIndex: 50,
+        background: 'rgba(255,255,255,0.85)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid #e8e6e1',
+        padding: '0 32px',
+        display: 'flex', alignItems: 'center', height: '56px', gap: '32px'
+      }}>
         {/* Brand */}
-        <div className="flex items-center gap-2.5 px-5 py-5 border-b border-slate-800">
-          <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center">
-            <Zap size={16} className="text-white" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '8px' }}>
+          <div style={{
+            width: '28px', height: '28px', borderRadius: '8px',
+            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <Layers size={14} color="white" />
           </div>
-          <span className="font-semibold text-white tracking-tight">TeamFlow</span>
+          <span style={{ fontWeight: 800, fontSize: '15px', color: '#1c1917', letterSpacing: '-0.3px' }}>
+            Taskly
+          </span>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
-          <NavLink to="/" end className={link}>
-            <LayoutDashboard size={16} /> Dashboard
-          </NavLink>
-          <NavLink to="/projects" className={link}>
-            <FolderKanban size={16} /> Projects
-          </NavLink>
+        {/* Nav links */}
+        <nav style={{ display: 'flex', gap: '4px' }}>
+          {[
+            { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+            { to: '/projects', label: 'Projects', icon: FolderOpen }
+          ].map(({ to, label, icon: Icon, end }) => (
+            <NavLink key={to} to={to} end={end} style={({ isActive }) => ({
+              display: 'flex', alignItems: 'center', gap: '6px',
+              padding: '6px 12px', borderRadius: '7px',
+              fontSize: '13px', fontWeight: 500, textDecoration: 'none',
+              transition: 'all 0.15s',
+              background: isActive ? '#ede9fe' : 'transparent',
+              color: isActive ? '#7c3aed' : '#78716c',
+            })}>
+              <Icon size={14} />
+              {label}
+            </NavLink>
+          ))}
         </nav>
 
-        {/* User footer */}
-        <div className="px-3 pb-4 border-t border-slate-800 pt-3">
-          <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg">
-            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">
+        {/* Right: user */}
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{
+              width: '30px', height: '30px', borderRadius: '50%',
+              background: 'linear-gradient(135deg, #7c3aed, #ec4899)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '12px', fontWeight: 700, color: 'white'
+            }}>
               {user.name?.[0]?.toUpperCase() || 'U'}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-slate-200 truncate">{user.name || 'User'}</p>
-              <p className="text-xs text-slate-500 truncate capitalize">{user.role || 'member'}</p>
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#1c1917', lineHeight: 1.2 }}>{user.name}</div>
+              <div style={{ fontSize: '11px', color: '#a8a29e', textTransform: 'capitalize' }}>{user.role}</div>
             </div>
-            <button onClick={logout} className="text-slate-500 hover:text-slate-300 transition-colors">
-              <LogOut size={15} />
-            </button>
           </div>
+          <button onClick={logout} style={{
+            background: 'none', border: '1px solid #e8e6e1', borderRadius: '7px',
+            padding: '5px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
+            fontSize: '12px', color: '#78716c', transition: 'all 0.15s'
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = '#fef2f2'}
+            onMouseLeave={e => e.currentTarget.style.background = 'none'}
+          >
+            <LogOut size={13} /> Sign out
+          </button>
         </div>
-      </aside>
+      </header>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto bg-slate-950">
+      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
         <Outlet />
       </main>
     </div>

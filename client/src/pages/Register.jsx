@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap } from 'lucide-react';
+import { Layers, ArrowRight } from 'lucide-react';
 import api from '../api';
 import toast from 'react-hot-toast';
 
@@ -19,81 +19,67 @@ export default function Register() {
       toast.success('Account created!');
       navigate('/');
     } catch (err) {
-      toast.error(err.response?.data?.error || err.response?.data?.errors?.[0]?.msg || 'Registration failed');
-    } finally {
-      setLoading(false);
-    }
+      toast.error(err.response?.data?.error || err.response?.data?.errors?.[0]?.msg || 'Failed');
+    } finally { setLoading(false); }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0a0f1e' }}>
-      <div className="w-full max-w-sm fade-in">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-9 h-9 rounded-xl bg-indigo-500 flex items-center justify-center">
-            <Zap size={18} className="text-white" />
+    <div style={{
+      minHeight: '100vh', background: '#f7f6f3',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px'
+    }}>
+      <div className="fade-in" style={{ width: '100%', maxWidth: '400px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{
+            width: '44px', height: '44px', borderRadius: '12px', margin: '0 auto 12px',
+            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <Layers size={20} color="white" />
           </div>
-          <span className="text-xl font-bold text-white tracking-tight">TeamFlow</span>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#1c1917', letterSpacing: '-0.5px' }}>
+            Create your account
+          </h1>
+          <p style={{ fontSize: '13px', color: '#78716c', marginTop: '4px' }}>
+            Start managing your team's work
+          </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 p-8" style={{ background: '#111827' }}>
-          <h1 className="text-xl font-semibold text-white mb-1">Create account</h1>
-          <p className="text-sm text-slate-400 mb-6">Start managing your team's work</p>
-
-          <form onSubmit={submit} className="space-y-4">
+        <div className="card" style={{ padding: '28px' }}>
+          <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Full name</label>
-              <input
-                type="text" required
-                value={form.name}
-                onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                className="w-full px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Anubhav"
-              />
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#57534e', marginBottom: '6px' }}>Full name</label>
+              <input className="input" type="text" required placeholder="Your name"
+                value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Email</label>
-              <input
-                type="email" required
-                value={form.email}
-                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                className="w-full px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="you@example.com"
-              />
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#57534e', marginBottom: '6px' }}>Email</label>
+              <input className="input" type="email" required placeholder="you@example.com"
+                value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Password</label>
-              <input
-                type="password" required minLength={6}
-                value={form.password}
-                onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                className="w-full px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Min. 6 characters"
-              />
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#57534e', marginBottom: '6px' }}>Password</label>
+              <input className="input" type="password" required minLength={6} placeholder="Min. 6 characters"
+                value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Role</label>
-              <select
-                value={form.role}
-                onChange={e => setForm(p => ({ ...p, role: e.target.value }))}
-                className="w-full px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
-              >
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#57534e', marginBottom: '6px' }}>I am a…</label>
+              <select className="input" value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))}>
                 <option value="member">Member</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
-            <button
-              type="submit" disabled={loading}
-              className="w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-medium transition-colors"
-            >
-              {loading ? 'Creating account…' : 'Create account'}
+            <button className="btn-primary" type="submit" disabled={loading}
+              style={{ marginTop: '4px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              {loading ? 'Creating…' : <> Create account <ArrowRight size={14} /> </>}
             </button>
           </form>
-
-          <p className="text-center text-xs text-slate-500 mt-5">
-            Already have an account?{' '}
-            <Link to="/login" className="text-indigo-400 hover:text-indigo-300">Sign in</Link>
-          </p>
         </div>
+
+        <p style={{ textAlign: 'center', fontSize: '13px', color: '#78716c', marginTop: '20px' }}>
+          Already have an account?{' '}
+          <Link to="/login" style={{ color: '#7c3aed', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
+        </p>
       </div>
     </div>
   );

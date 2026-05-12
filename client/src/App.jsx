@@ -18,15 +18,17 @@ export default function App() {
       <Toaster
         position="top-right"
         toastOptions={{
-          style: { background: '#1e293b', color: '#f1f5f9', border: '1px solid #334155' }
+          style: { background: '#ffffff', color: '#1c1917', border: '1px solid #e8e6e1', fontSize: '13px', fontFamily: 'Plus Jakarta Sans, sans-serif' },
+          success: { iconTheme: { primary: '#16a34a', secondary: '#fff' } },
+          error:   { iconTheme: { primary: '#dc2626', secondary: '#fff' } }
         }}
       />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login"    element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
-          <Route index element={<Dashboard />} />
-          <Route path="projects" element={<Projects />} />
+          <Route index             element={<Dashboard />} />
+          <Route path="projects"   element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
         </Route>
       </Routes>
